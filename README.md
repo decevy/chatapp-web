@@ -1,3 +1,64 @@
+# ChatApp Web
+
+A real-time chat application built with React, TypeScript, Vite, and SignalR.
+
+## Environment Configuration
+
+This project uses environment variables to configure API endpoints for different environments. All environment variables are managed through a centralized configuration file (`src/config/env.config.ts`).
+
+### Setup
+
+1. Copy `.env.example` to create environment-specific files:
+   - `.env.development` - for local development
+   - `.env.production` - for production builds
+
+2. Configure the following variables:
+   - `VITE_API_URL` - Base URL for your backend API
+   - `VITE_HUB_URL` - URL for SignalR hub connection
+
+3. Access configuration in your code:
+   ```typescript
+   import config from './config/env.config';
+   
+   // Use config.apiUrl, config.hubUrl, etc.
+   ```
+
+### Development
+
+For development, the Vite dev server proxies requests to the backend:
+
+```env
+VITE_API_URL=http://localhost:3000
+VITE_HUB_URL=http://localhost:3000/chatHub
+```
+
+### Production
+
+For production builds, set these to your actual backend domain:
+
+```env
+VITE_API_URL=https://your-api-domain.com
+VITE_HUB_URL=https://your-api-domain.com/chatHub
+```
+
+## Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+---
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

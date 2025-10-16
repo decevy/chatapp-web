@@ -24,9 +24,12 @@ coverage/
 .nyc_output/
 
 # Environment variables
+# Keep .env.example tracked for documentation
 .env
 .env*.local
 .env.local
+.env.development
+.env.production
 .env.development.local
 .env.test.local
 .env.production.local

@@ -2,6 +2,7 @@
 
 import * as signalR from '@microsoft/signalr';
 import { tokenService } from './token.service';
+import config from '../config/env.config';
 import { Message } from '../types/room.types';
 import {
   RoomEvent,
@@ -34,15 +35,16 @@ class SignalRService {
     }
 
     this.handlers = handlers;
-    const token = tokenService.getAccessToken();
-
-    if (!token) {
-      throw new Error('No access token available');
-    }
 
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:7011/chatHub', {
-        accessTokenFactory: () => token,
+      .withUrl(config.hubUrl, {
+        accessTokenFactory: () => {
+          const accessToken = tokenService.getAccessToken();
+          if (!accessToken) {
+            throw new Error('No access token available');
+          }
+          return accessToken;
+        }
       })
       .withAutomaticReconnect()
       .configureLogging(signalR.LogLevel.Information)
@@ -57,52 +59,6 @@ class SignalRService {
       console.error('SignalR Connection Error:', error);
       throw error;
     }
-  }
-
-  private setupEventHandlers(): void {
-    if (!this.connection) return;
-
-    this.connection.on('ReceiveMessage', (message: Message) => {
-      this.handlers.onReceiveMessage?.(message);
-    });
-
-    this.connection.on('MessageEdited', (data: MessageEdited) => {
-      this.handlers.onMessageEdited?.(data);
-    });
-
-    this.connection.on('MessageDeleted', (data: MessageDeleted) => {
-      this.handlers.onMessageDeleted?.(data);
-    });
-
-    this.connection.on('UserJoinedRoom', (data: RoomEvent) => {
-      this.handlers.onUserJoinedRoom?.(data);
-    });
-
-    this.connection.on('UserLeftRoom', (data: RoomEvent) => {
-      this.handlers.onUserLeftRoom?.(data);
-    });
-
-    this.connection.on('UserStartedTyping', (data: TypingIndicator) => {
-      this.handlers.onUserStartedTyping?.(data);
-    });
-
-    this.connection.on('UserStoppedTyping', (data: TypingIndicator) => {
-      this.handlers.onUserStoppedTyping?.(data);
-    });
-
-    this.connection.on('UserStatusChanged', (data: UserStatusChanged) => {
-      this.handlers.onUserStatusChanged?.(data);
-    });
-
-    this.connection.onreconnected(() => {
-      console.log('SignalR Reconnected');
-      this.handlers.onReconnected?.();
-    });
-
-    this.connection.onclose(() => {
-      console.log('SignalR Disconnected');
-      this.handlers.onDisconnected?.();
-    });
   }
 
   async disconnect(): Promise<void> {
@@ -149,6 +105,52 @@ class SignalRService {
 
   isConnected(): boolean {
     return this.connection?.state === signalR.HubConnectionState.Connected;
+  }
+
+  private setupEventHandlers(): void {
+    if (!this.connection) return;
+
+    this.connection.on('ReceiveMessage', (message: Message) => {
+      this.handlers.onReceiveMessage?.(message);
+    });
+
+    this.connection.on('MessageEdited', (data: MessageEdited) => {
+      this.handlers.onMessageEdited?.(data);
+    });
+
+    this.connection.on('MessageDeleted', (data: MessageDeleted) => {
+      this.handlers.onMessageDeleted?.(data);
+    });
+
+    this.connection.on('UserJoinedRoom', (data: RoomEvent) => {
+      this.handlers.onUserJoinedRoom?.(data);
+    });
+
+    this.connection.on('UserLeftRoom', (data: RoomEvent) => {
+      this.handlers.onUserLeftRoom?.(data);
+    });
+
+    this.connection.on('UserStartedTyping', (data: TypingIndicator) => {
+      this.handlers.onUserStartedTyping?.(data);
+    });
+
+    this.connection.on('UserStoppedTyping', (data: TypingIndicator) => {
+      this.handlers.onUserStoppedTyping?.(data);
+    });
+
+    this.connection.on('UserStatusChanged', (data: UserStatusChanged) => {
+      this.handlers.onUserStatusChanged?.(data);
+    });
+
+    this.connection.onreconnected(() => {
+      console.log('SignalR Reconnected');
+      this.handlers.onReconnected?.();
+    });
+
+    this.connection.onclose(() => {
+      console.log('SignalR Disconnected');
+      this.handlers.onDisconnected?.();
+    });
   }
 }
 

@@ -2,6 +2,7 @@
 
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { tokenService } from '../services/token.service';
+import config from '../config/env.config';
 import { LoginResponse, RefreshTokenRequest } from '../types/auth.types';
 
 // Types
@@ -16,7 +17,7 @@ type RequestConfigWithRetry = InternalAxiosRequestConfig & {
 
 // Create axios instance
 export const api = axios.create({
-  baseURL: '/api', // Proxied through Vite
+  baseURL: `${config.apiUrl}/api`,
   headers: {
     'Content-Type': 'application/json',
   },
