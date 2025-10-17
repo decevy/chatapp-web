@@ -1,12 +1,37 @@
-import './App.css'
+// src/App.tsx
+
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { ChatPage } from './pages/ChatPage';
 
 function App() {
   return (
-    <div className="App">
-      <h1>ChatApp</h1>
-      <p>Coming soon...</p>
-    </div>
-  )
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+
+          {/* Protected Routes */}
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <ChatPage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Catch all - redirect to home */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
