@@ -30,20 +30,20 @@ export function LoginPage() {
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.card}>
-        <h1 style={styles.title}>ChatApp</h1>
-        <h2 style={styles.subtitle}>Sign In</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-5">
+      <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-md">
+        <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">ChatApp</h1>
+        <h2 className="text-2xl text-center mb-8 text-gray-600">Sign In</h2>
 
         {error && (
-          <div style={styles.error}>
+          <div className="bg-red-50 text-red-600 p-3 rounded mb-5 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={styles.form}>
-          <div style={styles.formGroup}>
-            <label htmlFor="email" style={styles.label}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email" className="text-sm font-medium text-gray-800">
               Email
             </label>
             <input
@@ -54,12 +54,12 @@ export function LoginPage() {
               placeholder="your@email.com"
               required
               disabled={isSubmitting}
-              style={styles.input}
+              className="p-3 text-base border border-gray-300 rounded outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
           </div>
 
-          <div style={styles.formGroup}>
-            <label htmlFor="password" style={styles.label}>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="password" className="text-sm font-medium text-gray-800">
               Password
             </label>
             <input
@@ -70,141 +70,37 @@ export function LoginPage() {
               placeholder="••••••••"
               required
               disabled={isSubmitting}
-              style={styles.input}
+              className="p-3 text-base border border-gray-300 rounded outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            style={{
-              ...styles.button,
-              ...(isSubmitting ? styles.buttonDisabled : {}),
-            }}
+            className={`p-3 text-base font-semibold text-white rounded mt-2 transition-all ${
+              isSubmitting
+                ? 'bg-gray-400 cursor-not-allowed'
+                : 'bg-blue-500 hover:bg-blue-600 cursor-pointer'
+            }`}
           >
             {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
         </form>
 
-        <p style={styles.footer}>
+        <p className="mt-5 text-center text-sm text-gray-600">
           Don't have an account?{' '}
-          <Link to="/register" style={styles.link}>
+          <Link to="/register" className="text-blue-500 font-semibold hover:underline">
             Sign up
           </Link>
         </p>
 
-        <div style={styles.testAccounts}>
-          <p style={styles.testTitle}>Test Accounts:</p>
-          <p style={styles.testAccount}>aya@test.com / test123</p>
-          <p style={styles.testAccount}>bobby@test.com / test123</p>
-          <p style={styles.testAccount}>carlos@test.com / test123</p>
+        <div className="mt-8 p-4 bg-gray-50 rounded text-xs">
+          <p className="font-semibold mb-2 text-gray-600">Test Accounts:</p>
+          <p className="my-1 text-gray-600 font-mono">aya@test.com / test123</p>
+          <p className="my-1 text-gray-600 font-mono">bobby@test.com / test123</p>
+          <p className="my-1 text-gray-600 font-mono">carlos@test.com / test123</p>
         </div>
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    minHeight: '100vh',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: '20px',
-  },
-  card: {
-    backgroundColor: 'white',
-    padding: '40px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-    width: '100%',
-    maxWidth: '400px',
-  },
-  title: {
-    fontSize: '32px',
-    fontWeight: 'bold',
-    textAlign: 'center' as const,
-    marginBottom: '8px',
-    color: '#333',
-  },
-  subtitle: {
-    fontSize: '24px',
-    textAlign: 'center' as const,
-    marginBottom: '30px',
-    color: '#666',
-  },
-  error: {
-    backgroundColor: '#fee',
-    color: '#c33',
-    padding: '12px',
-    borderRadius: '4px',
-    marginBottom: '20px',
-    fontSize: '14px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '20px',
-  },
-  formGroup: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '8px',
-  },
-  label: {
-    fontSize: '14px',
-    fontWeight: '500',
-    color: '#333',
-  },
-  input: {
-    padding: '12px',
-    fontSize: '16px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    outline: 'none',
-  },
-  button: {
-    padding: '12px',
-    fontSize: '16px',
-    fontWeight: '600',
-    color: 'white',
-    backgroundColor: '#007bff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    marginTop: '10px',
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
-    cursor: 'not-allowed',
-  },
-  footer: {
-    marginTop: '20px',
-    textAlign: 'center' as const,
-    fontSize: '14px',
-    color: '#666',
-  },
-  link: {
-    color: '#007bff',
-    textDecoration: 'none',
-    fontWeight: '600',
-  },
-  testAccounts: {
-    marginTop: '30px',
-    padding: '15px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '4px',
-    fontSize: '12px',
-  },
-  testTitle: {
-    fontWeight: '600',
-    marginBottom: '8px',
-    color: '#666',
-  },
-  testAccount: {
-    margin: '4px 0',
-    color: '#666',
-    fontFamily: 'monospace',
-  },
-};

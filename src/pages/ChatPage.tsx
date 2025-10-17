@@ -13,23 +13,26 @@ export function ChatPage() {
   };
 
   return (
-    <div style={styles.container}>
-      <header style={styles.header}>
-        <h1 style={styles.title}>ChatApp</h1>
-        <div style={styles.userInfo}>
-          <span style={styles.username}>Welcome, {user?.username}!</span>
-          <button onClick={handleLogout} style={styles.logoutButton}>
+    <div className="min-h-screen bg-gray-100">
+      <header className="bg-white py-5 px-10 shadow-md flex justify-between items-center">
+        <h1 className="m-0 text-2xl text-gray-800 font-bold">ChatApp</h1>
+        <div className="flex items-center gap-5">
+          <span className="text-sm text-gray-600">Welcome, {user?.username}!</span>
+          <button 
+            onClick={handleLogout} 
+            className="py-2 px-4 text-sm text-white bg-red-600 border-none rounded cursor-pointer hover:bg-red-700 transition-colors"
+          >
             Logout
           </button>
         </div>
       </header>
 
-      <div style={styles.content}>
-        <h2 style={styles.comingSoon}>Chat Interface Coming Soon...</h2>
-        <p style={styles.description}>
+      <div className="max-w-3xl mx-auto my-16 p-10 bg-white rounded-lg shadow-lg text-center">
+        <h2 className="text-3xl text-gray-800 mb-5">Chat Interface Coming Soon...</h2>
+        <p className="text-base text-gray-600 mb-10">
           You're successfully logged in! The chat interface will be built next.
         </p>
-        <div style={styles.info}>
+        <div className="text-left p-5 bg-gray-50 rounded text-sm space-y-2">
           <p><strong>User ID:</strong> {user?.id}</p>
           <p><strong>Email:</strong> {user?.email}</p>
           <p><strong>Username:</strong> {user?.username}</p>
@@ -38,67 +41,3 @@ export function ChatPage() {
     </div>
   );
 }
-
-const styles = {
-  container: {
-    minHeight: '100vh',
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    backgroundColor: 'white',
-    padding: '20px 40px',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  title: {
-    margin: 0,
-    fontSize: '24px',
-    color: '#333',
-  },
-  userInfo: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '20px',
-  },
-  username: {
-    fontSize: '14px',
-    color: '#666',
-  },
-  logoutButton: {
-    padding: '8px 16px',
-    fontSize: '14px',
-    color: 'white',
-    backgroundColor: '#dc3545',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  content: {
-    maxWidth: '800px',
-    margin: '60px auto',
-    padding: '40px',
-    backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    textAlign: 'center' as const,
-  },
-  comingSoon: {
-    fontSize: '32px',
-    color: '#333',
-    marginBottom: '20px',
-  },
-  description: {
-    fontSize: '16px',
-    color: '#666',
-    marginBottom: '40px',
-  },
-  info: {
-    textAlign: 'left' as const,
-    padding: '20px',
-    backgroundColor: '#f8f9fa',
-    borderRadius: '4px',
-    fontSize: '14px',
-  },
-};

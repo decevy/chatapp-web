@@ -14,9 +14,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   // Show loading while checking authentication
   if (isLoading) {
     return (
-      <div style={styles.container}>
-        <div style={styles.spinner}></div>
-        <p style={styles.text}>Loading...</p>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+        <div className="w-10 h-10 border-4 border-gray-200 border-t-blue-500 rounded-full animate-spin"></div>
+        <p className="mt-5 text-base text-gray-600">Loading...</p>
       </div>
     );
   }
@@ -29,27 +29,3 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   // Render children if authenticated
   return <>{children}</>;
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    backgroundColor: '#f5f5f5',
-  },
-  spinner: {
-    width: '40px',
-    height: '40px',
-    border: '4px solid #f3f3f3',
-    borderTop: '4px solid #007bff',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
-  },
-  text: {
-    marginTop: '20px',
-    fontSize: '16px',
-    color: '#666',
-  },
-};
