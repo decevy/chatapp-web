@@ -99,7 +99,6 @@ export function RegisterPage() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              minLength={6}
               disabled={isSubmitting}
               className="p-3 text-base border border-gray-300 rounded outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
@@ -116,7 +115,6 @@ export function RegisterPage() {
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
               required
-              minLength={6}
               disabled={isSubmitting}
               className="p-3 text-base border border-gray-300 rounded outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
