@@ -57,6 +57,7 @@ const setAuthHeader = (config: InternalAxiosRequestConfig, token: string): void 
   }
 };
 
+// todo: understand this code
 const queueFailedRequest = async (originalRequest: RequestConfigWithRetry): Promise<any> => {
   const token = await new Promise<string>((resolve, reject) => {
     failedQueue.push({ resolve, reject });

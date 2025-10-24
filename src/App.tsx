@@ -6,6 +6,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { ChatPage } from './pages/ChatPage';
+import { ChatProvider } from './contexts/ChatContext';
 
 function App() {
   return (
@@ -21,7 +22,9 @@ function App() {
             path="/"
             element={
               <ProtectedRoute>
-                <ChatPage />
+                <ChatProvider>
+                  <ChatPage />
+                </ChatProvider>
               </ProtectedRoute>
             }
           />

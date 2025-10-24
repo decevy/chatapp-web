@@ -24,48 +24,55 @@ export type SignalREventHandlers = {
   onReconnected?: () => void;
   onDisconnected?: () => void;
 };
-
+  
 class SignalRService {
   private connection: signalR.HubConnection | null = null;
   private handlers: SignalREventHandlers = {};
+  private connectionLock: Promise<void> = Promise.resolve();
 
   async connect(handlers: SignalREventHandlers): Promise<void> {
-    if (this.connection?.state === signalR.HubConnectionState.Connected) {
-      return;
-    }
+    this.connectionLock = this.connectionLock.then(async () => {
+      if (this.connection?.state === signalR.HubConnectionState.Connected || this.connection?.state === signalR.HubConnectionState.Connecting) {
+        return;
+      }
 
-    this.handlers = handlers;
+      this.handlers = handlers;
 
-    this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(config.hubUrl, {
-        accessTokenFactory: () => {
-          const accessToken = tokenService.getAccessToken();
-          if (!accessToken) {
-            throw new Error('No access token available');
+      this.connection = new signalR.HubConnectionBuilder()
+        .withUrl(config.hubUrl, {
+          accessTokenFactory: () => {
+            const accessToken = tokenService.getAccessToken();
+            if (!accessToken) {
+              throw new Error('No access token available');
+            }
+            return accessToken;
           }
-          return accessToken;
-        }
-      })
-      .withAutomaticReconnect()
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
+        })
+        .withAutomaticReconnect()
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
 
-    this.setupEventHandlers();
+      this.setupEventHandlers();
 
-    try {
-      await this.connection.start();
-      console.log('SignalR Connected');
-    } catch (error) {
-      console.error('SignalR Connection Error:', error);
-      throw error;
-    }
+      try {
+        await this.connection.start();
+        console.log('SignalR Connection Started');
+      } catch (error) {
+        console.error('SignalR Connection Error:', error);
+        throw error;
+      }
+    });
+    return this.connectionLock;
   }
 
   async disconnect(): Promise<void> {
-    if (this.connection) {
-      await this.connection.stop();
-      this.connection = null;
-    }
+    this.connectionLock = this.connectionLock.then(async () => {
+      if (this.connection !== null) {
+        await this.connection.stop();
+        this.connection = null;
+      }
+    });
+    return this.connectionLock;
   }
 
   async joinRoom(roomId: number): Promise<void> {

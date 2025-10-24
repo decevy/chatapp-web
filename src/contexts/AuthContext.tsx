@@ -94,6 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     logout,
   };
 
+  // todo: understand this code
   return (
     <AuthContext.Provider value={value}>
       {children}
