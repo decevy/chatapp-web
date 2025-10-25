@@ -1,6 +1,6 @@
 // src/contexts/ChatContext.tsx
 
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { roomsApi } from '../api/rooms.api';
 import { signalRService } from '../services/signalr.services';
 import { RoomSummary, Room, Message } from '../types/room.types';
@@ -33,7 +33,12 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  
+
+  const currentRoomRef = useRef<Room | null>(null);
+  useEffect(() => {
+    currentRoomRef.current = currentRoom;
+  }, [currentRoom]);
+
   const handleReceiveMessage = useCallback((message: Message) => {
     console.log('New message received:', message);
     setMessages(previousMessages => [...previousMessages, message]);
@@ -42,11 +47,11 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const handleReconnected = useCallback(() => {
     console.log('Reconnected to SignalR');
     setIsConnected(true);
-    if (currentRoom) {
-      signalRService.joinRoom(currentRoom.id)
+    if (currentRoomRef.current) {
+      signalRService.joinRoom(currentRoomRef.current.id)
         .catch(error => console.error('Failed to rejoin room:', error));
     }
-  }, [currentRoom]);
+  }, []);
 
   const handleDisconnected = useCallback(() => {
     console.log('Disconnected from SignalR');
@@ -78,7 +83,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       };
       disconnect();
     };
-  }, [user, handleReceiveMessage, handleReconnected, handleDisconnected]);
+  }, [user]);
 
   const loadRooms = useCallback(async () => {
     setIsLoading(true);
