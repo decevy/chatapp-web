@@ -44,6 +44,11 @@ export function ChatProvider({ children }: ChatProviderProps) {
     setMessages(previousMessages => [...previousMessages, message]);
   }, []);
 
+  const handleReconnecting = useCallback(() => {
+    console.log('Reconnecting to SignalR');
+    setIsConnected(false);
+  }, []);
+
   const handleReconnected = useCallback(() => {
     console.log('Reconnected to SignalR');
     setIsConnected(true);
@@ -63,13 +68,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
 
     const connectSignalR = async () => {
       try {
-        await signalRService.connect({
-          onReceiveMessage: handleReceiveMessage,
-          onReconnected: handleReconnected,
-          onDisconnected: handleDisconnected,
-          // todo: add more event handlers later (typing, editing, etc.)
-        });
-        
+        await connectWithHandlers();
         setIsConnected(true);
       } catch (error) {
         console.error('SignalR Connection Failed:', error);
@@ -84,6 +83,16 @@ export function ChatProvider({ children }: ChatProviderProps) {
       disconnect();
     };
   }, [user]);
+
+  const connectWithHandlers = async () => {
+    await signalRService.connect({
+      onReceiveMessage: handleReceiveMessage,
+      onReconnecting: handleReconnecting,
+      onReconnected: handleReconnected,
+      onDisconnected: handleDisconnected,
+      // todo: add more event handlers later (typing, editing, etc.)
+    });
+  };
 
   const loadRooms = useCallback(async () => {
     setIsLoading(true);
@@ -107,6 +116,10 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const selectRoom = useCallback(async (roomId: number) => {
     setIsLoading(true);
     try {
+      if (!signalRService.isConnected()) {
+        await connectWithHandlers();
+      }
+
       if (currentRoom) {
         await signalRService.leaveRoom(currentRoom.id);
       }

@@ -21,6 +21,7 @@ export type SignalREventHandlers = {
   onUserStartedTyping?: (data: TypingIndicator) => void;
   onUserStoppedTyping?: (data: TypingIndicator) => void;
   onUserStatusChanged?: (data: UserStatusChanged) => void;
+  onReconnecting?: () => void;
   onReconnected?: () => void;
   onDisconnected?: () => void;
 };
@@ -147,6 +148,11 @@ class SignalRService {
 
     this.connection.on('UserStatusChanged', (data: UserStatusChanged) => {
       this.handlers.onUserStatusChanged?.(data);
+    });
+
+    this.connection.onreconnecting(() => {
+      console.log('SignalR Reconnecting');
+      this.handlers.onReconnecting?.();
     });
 
     this.connection.onreconnected(() => {
