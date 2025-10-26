@@ -66,25 +66,23 @@ export function ChatProvider({ children }: ChatProviderProps) {
   useEffect(() => {
     if (!user) return;
 
-    const connectSignalR = async () => {
+    const initializeConnection = async () => {
       try {
-        await connectWithHandlers();
+        await connect();
         setIsConnected(true);
+        loadRooms();
       } catch (error) {
         console.error('SignalR Connection Failed:', error);
       }
     };
-    connectSignalR();
+    initializeConnection();
 
     return () => {
-      const disconnect = async () => {
-        await signalRService.disconnect();
-      };
-      disconnect();
+      signalRService.disconnect();
     };
   }, [user]);
 
-  const connectWithHandlers = async () => {
+  const connect = useCallback(async () => {
     await signalRService.connect({
       onReceiveMessage: handleReceiveMessage,
       onReconnecting: handleReconnecting,
@@ -92,7 +90,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
       onDisconnected: handleDisconnected,
       // todo: add more event handlers later (typing, editing, etc.)
     });
-  };
+  }, []);
 
   const loadRooms = useCallback(async () => {
     setIsLoading(true);
@@ -107,17 +105,11 @@ export function ChatProvider({ children }: ChatProviderProps) {
     }
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      loadRooms();
-    }
-  }, [user]);
-
   const selectRoom = useCallback(async (roomId: number) => {
     setIsLoading(true);
     try {
       if (!signalRService.isConnected()) {
-        await connectWithHandlers();
+        await connect();
       }
 
       if (currentRoom) {
