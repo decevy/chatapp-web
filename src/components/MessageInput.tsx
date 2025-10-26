@@ -18,6 +18,7 @@ export function MessageInput() {
       setMessage('');
     } catch (error) {
       console.error('Failed to send message:', error);
+      alert('Failed to send message. Please try again.'); // todo: show a proper error message
     }
   };
 
