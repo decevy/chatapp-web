@@ -111,7 +111,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
     if (user) {
       loadRooms();
     }
-  }, [user, loadRooms]);
+  }, [user]);
 
   const selectRoom = useCallback(async (roomId: number) => {
     setIsLoading(true);
