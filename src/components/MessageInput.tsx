@@ -46,7 +46,7 @@ export function MessageInput() {
         <button 
           disabled={!message.trim()}
           type="submit"
-          className="bg-blue-500 disabled:bg-blue-400 text-white px-4 py-1.5 rounded-lg hover:bg-blue-600 m-1"
+          className="bg-blue-500 disabled:bg-blue-400 text-white px-4 py-2 text-sm rounded-lg hover:bg-blue-600 m-1"
         >
           Send
         </button>
