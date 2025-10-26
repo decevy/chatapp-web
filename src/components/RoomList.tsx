@@ -5,7 +5,7 @@ import { RoomSummary } from '../types/room.types';
 import { formatDistanceToNow } from 'date-fns';
 
 export function RoomList() {
-  const { rooms, currentRoom, selectRoom, isLoading } = useChat();
+  const { rooms, currentRoom, selectRoom } = useChat();
 
   const handleRoomClick = (roomId: number) => {
     selectRoom(roomId);
@@ -16,14 +16,6 @@ export function RoomList() {
     const content = room.lastMessage.content;
     return content.length > 50 ? content.substring(0, 50) + '...' : content;
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-full">
-        <div className="text-gray-500">Loading rooms...</div>
-      </div>
-    );
-  }
 
   if (rooms.length === 0) {
     return (
