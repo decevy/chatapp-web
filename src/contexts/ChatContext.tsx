@@ -10,6 +10,7 @@ interface ChatContextType {
   rooms: RoomSummary[];
   currentRoom: Room | null;
   messages: Message[];
+  lastMessage: Message | null;
   isLoading: boolean;
   isConnected: boolean;
   
@@ -31,6 +32,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const [rooms, setRooms] = useState<RoomSummary[]>([]);
   const [currentRoom, setCurrentRoom] = useState<Room | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [lastMessage, setLastMessage] = useState<Message | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
 
@@ -42,6 +44,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
   const handleReceiveMessage = useCallback((message: Message) => {
     console.log('New message received:', message);
     setMessages(previousMessages => [...previousMessages, message]);
+    setLastMessage(message);
   }, []);
 
   const handleReconnecting = useCallback(() => {
@@ -163,6 +166,7 @@ export function ChatProvider({ children }: ChatProviderProps) {
     rooms,
     currentRoom,
     messages,
+    lastMessage,
     isLoading,
     isConnected,
     loadRooms,

@@ -39,7 +39,7 @@ export function MessageInput() {
   };
 
   return (
-    <div className="m-3 border bg-white border-gray-300 rounded-xl flex items-end focus-within:ring-3 focus-within:ring-blue-100 focus-within:border-blue-300">
+    <div className="m-3 mt-0 border bg-white border-gray-300 rounded-xl flex items-end focus-within:ring-3 focus-within:ring-blue-100 focus-within:border-blue-300">
       <textarea
         placeholder="Type a message..."
         value={message}
